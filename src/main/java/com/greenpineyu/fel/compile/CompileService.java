@@ -1,6 +1,7 @@
 package com.greenpineyu.fel.compile;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -12,10 +13,10 @@ import com.greenpineyu.fel.context.FelContext;
 import com.greenpineyu.fel.parser.FelNode;
 
 public class CompileService {
-	
+
 	private SourceGenerator srcGen;
 	private FelCompiler complier;
-	
+
 	public SourceGenerator getSrcGen() {
 		return srcGen;
 	}
@@ -72,15 +73,9 @@ public class CompileService {
 		try {
 			@SuppressWarnings("unchecked")
 			Class<FelCompiler> cls = (Class<FelCompiler>) Class.forName(name);
-			comp = cls.newInstance();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} finally {
-		}
+			comp = cls.getConstructor().newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e) {}
 		return comp;
 	}
 
@@ -94,7 +89,7 @@ public class CompileService {
 		}
 		return compileClassName;
 	}
-	
+
 	public Expression compile(FelContext ctx, FelNode node, String originalExp) {
 		try {
 			JavaSource src = srcGen.getSource(ctx, node);
@@ -110,7 +105,7 @@ public class CompileService {
 		}
 		return null;
 	}
-	
+
 	public static void main(String[] args) {
 		System.getProperties().list(System.out);
 	}

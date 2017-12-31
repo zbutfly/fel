@@ -6,11 +6,10 @@ public interface SecurityMgr {
 
 	/**
 	 * 是否允许访问某个方法
+	 * 
 	 * @param m
 	 * @return
 	 */
 	boolean isCallable(Method m);
-
-
 
 }

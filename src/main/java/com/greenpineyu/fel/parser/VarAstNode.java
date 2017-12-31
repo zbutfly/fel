@@ -11,7 +11,7 @@ import com.greenpineyu.fel.context.ArrayCtx;
 import com.greenpineyu.fel.context.FelContext;
 import com.greenpineyu.fel.function.operator.Dot;
 
-public class VarAstNode extends AbstFelNode  {
+public class VarAstNode extends AbstFelNode {
 	private final String text;
 
 	public VarAstNode(Token token) {
@@ -19,20 +19,18 @@ public class VarAstNode extends AbstFelNode  {
 		this.text = token.getText();
 	}
 
-	
+	@Override
 	public String getText() {
 		return this.text;
 	}
-	
-	
+
+	@Override
 	public Object interpret(FelContext context, FelNode node) {
 		return context.get(text);
 	}
-	
+
 	public static boolean isVar(FelNode n) {
-		if (n == null) {
-			return false;
-		}
+		if (n == null) return false;
 		boolean isVar = n instanceof VarAstNode;
 		if (isVar) {
 			if (n instanceof CommonTree) {
@@ -52,33 +50,31 @@ public class VarAstNode extends AbstFelNode  {
 
 	{
 		this.builder = new SourceBuilder() {
-			
-			
+
+			@Override
 			public String source(FelContext ctx, FelNode node) {
-				if(!node.isDefaultInterpreter()){
+				if (!node.isDefaultInterpreter()) {
 					// 用户自定义解析器
 					return InterpreterSourceBuilder.getInstance().source(ctx, node);
 				}
 				Class<?> type = returnType(ctx, node);
 				String varName = node.getText();
-				String getVarCode = "context.get(\""+varName+"\")";
+				String getVarCode = "context.get(\"" + varName + "\")";
 				if (ctx instanceof ArrayCtx) {
 					ArrayCtx c = (ArrayCtx) ctx;
-					getVarCode = "((context instanceof ArrayCtx)?((ArrayCtx)context).get("
-							+ c.getIndex(varName)
-							+ "):context.get(\""
+					getVarCode = "((context instanceof ArrayCtx)?((ArrayCtx)context).get(" + c.getIndex(varName) + "):context.get(\""
 							+ varName + "\"))";
 				}
-					
+
 				String code = getVarFullCode(type, getVarCode);
 				return code;
 			}
 
-			
+			@Override
 			public Class<?> returnType(FelContext ctx, FelNode node) {
-				Class<?> type = AbstractContext.getVarType(node.getText(),ctx);
-				if(type == null){
-				   type = InterpreterSourceBuilder.getInstance().returnType(ctx, node);
+				Class<?> type = AbstractContext.getVarType(node.getText(), ctx);
+				if (type == null) {
+					type = InterpreterSourceBuilder.getInstance().returnType(ctx, node);
 				}
 				return type;
 			}

@@ -18,6 +18,7 @@ public interface Parser {
 
 	/**
 	 * 检验表达式是否合法
+	 * 
 	 * @param exp
 	 * @return
 	 */

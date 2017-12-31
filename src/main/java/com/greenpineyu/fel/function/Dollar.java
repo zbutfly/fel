@@ -1,5 +1,7 @@
 package com.greenpineyu.fel.function;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.greenpineyu.fel.FelEngine;
 import com.greenpineyu.fel.common.StringUtils;
 import com.greenpineyu.fel.compile.FelMethod;
@@ -15,11 +17,12 @@ import com.greenpineyu.fel.parser.FelNode;
  */
 public class Dollar implements Function {
 
-
+	@Override
 	public String getName() {
 		return "$";
 	}
 
+	@Override
 	public Object call(FelNode node, FelContext context) {
 		String txt = getChildText(node);
 
@@ -37,12 +40,9 @@ public class Dollar implements Function {
 		Object o = null;
 		if (cls != null) {
 			try {
-				o = cls.newInstance();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+				o = cls.getConstructor().newInstance();
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException e) {}
 		}
 		return o;
 	}
@@ -85,6 +85,7 @@ public class Dollar implements Function {
 		return txt;
 	}
 
+	@Override
 	public SourceBuilder toMethod(FelNode node, FelContext ctx) {
 		String txt = getChildText(node);
 
@@ -101,8 +102,7 @@ public class Dollar implements Function {
 		// System.out.println("abc.new".endsWith(".new"));
 		String exp = "$('Math').max($('Math').min(1,2),3).doubleValue()";
 		exp = "$('String.new').concat('abc')";
-		Object eval = FelEngine.instance
-.eval(exp);
+		Object eval = FelEngine.instance.eval(exp);
 		System.out.println(eval);
 	}
 

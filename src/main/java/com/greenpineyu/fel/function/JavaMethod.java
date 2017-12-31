@@ -33,26 +33,26 @@ public class JavaMethod implements Function {
 	 * java method
 	 */
 	private Method method;
-	
-	public JavaMethod(String name,Method method,Object obj) {
+
+	public JavaMethod(String name, Method method, Object obj) {
 		this.name = name;
 		this.method = method;
 		this.obj = obj;
 	}
 
-	
+	@Override
 	public Object call(FelNode node, FelContext context) {
-//		Dot.clearNullNode(node);
+		// Dot.clearNullNode(node);
 		Object[] args = CommonFunction.evalArgs(node, context);
 		return Dot.invoke(obj, method, args);
 	}
 
-	
+	@Override
 	public String getName() {
 		return name;
 	}
 
-	
+	@Override
 	public SourceBuilder toMethod(FelNode node, FelContext context) {
 		StringBuilder code = new StringBuilder();
 		String classOrObjCode = getClassOrObjCode();
@@ -62,16 +62,15 @@ public class JavaMethod implements Function {
 		code.append(methodName);
 		StringBuilder methodParams = getParamsCode(node, context);
 		code.append("(").append(methodParams).append(")");
-		FelMethod returnMe = new FelMethod(method
-				.getReturnType(), code.toString());
+		FelMethod returnMe = new FelMethod(method.getReturnType(), code.toString());
 		return returnMe;
 	}
 
 	private String getClassOrObjCode() {
-		if(obj == null){
+		if (obj == null) {
 			Class<?> cls = method.getDeclaringClass();
 			return cls.getCanonicalName();
-		}else{
+		} else {
 			String varName = VarBuffer.push(obj);
 			return varName;
 		}
@@ -89,7 +88,7 @@ public class JavaMethod implements Function {
 				FelNode p = params.get(i);
 				String paramCode = Dot.getParamCode(paramType, p, context);
 				methodParams.append(paramCode);
-				if(i<paramTypes.length-1){
+				if (i < paramTypes.length - 1) {
 					methodParams.append(",");
 				}
 			}
@@ -97,10 +96,8 @@ public class JavaMethod implements Function {
 		return methodParams;
 	}
 
-	public static void main(String[] args) throws SecurityException,
-			NoSuchMethodException {
+	public static void main(String[] args) throws SecurityException, NoSuchMethodException {
 
 	}
-
 
 }

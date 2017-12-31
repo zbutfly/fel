@@ -33,7 +33,8 @@ public interface FelEngine {
 	 * 使用指定的引擎上下文执行表达式，获取结果
 	 * 
 	 * @param exp
-	 * @param ctx 引擎上下文
+	 * @param ctx
+	 *            引擎上下文
 	 * @return
 	 */
 	Object eval(String exp, FelContext ctx);
@@ -51,7 +52,8 @@ public interface FelEngine {
 	 * 
 	 * @param exp
 	 * @param ctx
-	 * @param opts 编译优化选项
+	 * @param opts
+	 *            编译优化选项
 	 * @return
 	 */
 	Expression compile(String exp, FelContext ctx, Optimizer... opts);
@@ -71,54 +73,63 @@ public interface FelEngine {
 
 	/**
 	 * 获取编译器
+	 * 
 	 * @return
 	 */
-	CompileService getCompiler() ;
+	CompileService getCompiler();
 
 	/**
 	 * 设置编译器
+	 * 
 	 * @param compiler
 	 */
 	void setCompiler(CompileService compiler);
 
 	/**
 	 * 获取解析器
+	 * 
 	 * @return
 	 */
 	Parser getParser();
 
 	/**
 	 * 设置解析器
+	 * 
 	 * @param parser
 	 */
 	void setParser(Parser parser);
 
 	/**
 	 * 获取函数管理器
+	 * 
 	 * @return
 	 */
 	FunMgr getFunMgr();
 
 	/**
 	 * 设置函数管理器
+	 * 
 	 * @param funMgr
 	 */
 	void setFunMgr(FunMgr funMgr);
 
 	/**
 	 * 设置Context
+	 * 
 	 * @param context
 	 */
 	void setContext(FelContext context);
 
 	/**
 	 * 返回安全管理器
+	 * 
 	 * @return
 	 */
 	SecurityMgr getSecurityMgr();
 
 	/**
 	 * 设置安全管理器
+	 * 
 	 * @param mgr
 	 */
 	void setSecurityMgr(SecurityMgr mgr);

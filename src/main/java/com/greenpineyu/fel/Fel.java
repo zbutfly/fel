@@ -32,9 +32,7 @@ public class Fel {
 	}
 
 	public static FelContext newContext(String name) {
-		if ("Array".equalsIgnoreCase(name)) {
-			return new ArrayCtxImpl();
-		}
+		if ("Array".equalsIgnoreCase(name)) return new ArrayCtxImpl();
 		return new MapContext();
 	}
 
@@ -45,4 +43,3 @@ public class Fel {
 	}
 
 }
-

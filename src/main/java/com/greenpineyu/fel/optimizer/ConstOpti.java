@@ -14,21 +14,19 @@ import com.greenpineyu.fel.parser.FelNode;
 import com.greenpineyu.fel.parser.FunNode;
 
 /**
- * 常量节点优化，优化表达式中的常量部分。
- * 表达式："1+2+var",当var是变量时，可以优化成"3+var";当var是常量，其值为3时，可以优化成"6"
+ * 常量节点优化，优化表达式中的常量部分。 表达式："1+2+var",当var是变量时，可以优化成"3+var";当var是常量，其值为3时，可以优化成"6"
  * 
  * @author yuqingsong
  * 
  */
 public class ConstOpti implements Optimizer {
 
-
-	
+	@Override
 	public FelNode call(FelContext ctx, FelNode node) {
-		if(node.stable()){
+		if (node.stable()) {
 			Object value = node.getInterpreter().interpret(ctx, node);
 			return newConstNode(node, value);
-		}else{
+		} else {
 			List<FelNode> children = node.getChildren();
 			if (children != null) {
 				// 是否进行过短路优化
@@ -44,15 +42,10 @@ public class ConstOpti implements Optimizer {
 						// 短路的判断值，or使用True来判断，and使用false来判断
 						Boolean result = isOr;
 						// if (isOr) {
-						FelNode constNode = toShortCutConst(node, ctx, left,
-								result);
-						if (constNode != null) {
-							return constNode;
-						}
+						FelNode constNode = toShortCutConst(node, ctx, left, result);
+						if (constNode != null) return constNode;
 						constNode = toShortCutConst(node, ctx, right, result);
-						if (constNode != null) {
-							return constNode;
-						}
+						if (constNode != null) return constNode;
 						// else if (right.stable()) {
 						// Object rightValue = node.getInterpreter()
 						// .interpret(ctx, right);
@@ -93,9 +86,7 @@ public class ConstOpti implements Optimizer {
 		}
 	}
 
-
-	private FelNode toShortCutConst(FelNode node, FelContext ctx, FelNode left,
-			Boolean result) {
+	private FelNode toShortCutConst(FelNode node, FelContext ctx, FelNode left, Boolean result) {
 		FelNode constNode = null;
 		if (left.stable()) {
 			Object leftValue = node.getInterpreter().interpret(ctx, left);
@@ -107,12 +98,10 @@ public class ConstOpti implements Optimizer {
 	}
 
 	@SuppressWarnings("unused")
-	private void setConstValue(List<FelNode> children, FelNode left,
-			Object leftValue) {
+	private void setConstValue(List<FelNode> children, FelNode left, Object leftValue) {
 		children.remove(1);
 		children.set(0, newConstNode(left, leftValue));
 	}
-
 
 	private FelNode newConstNode(FelNode node, Object value) {
 		Token token = new ConstOptToken(node);
@@ -129,11 +118,12 @@ public class ConstOpti implements Optimizer {
  * 
  */
 @SuppressWarnings("serial")
-class ConstOptToken extends CommonToken{
+class ConstOptToken extends CommonToken {
 	@SuppressWarnings("unused")
 	private final FelNode node;
-	ConstOptToken(FelNode node){
-		super(-1,node.getText());
+
+	ConstOptToken(FelNode node) {
+		super(-1, node.getText());
 		this.node = node;
 	}
 }

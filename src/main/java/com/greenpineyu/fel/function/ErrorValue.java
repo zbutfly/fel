@@ -3,11 +3,7 @@ package com.greenpineyu.fel.function;
 import com.greenpineyu.fel.parser.FelNode;
 
 /**
- * 包名				.script.function
- * 类名				ERRORVALUE.java
- * 创建日期				Oct 27, 20108:56:26 AM
- * 作者				
- * 版权				
+ * 包名 .script.function 类名 ERRORVALUE.java 创建日期 Oct 27, 20108:56:26 AM 作者 版权
  */
 public class ErrorValue {
 
@@ -21,11 +17,11 @@ public class ErrorValue {
 	 */
 	private String errorMsg;
 
-	public ErrorValue(FelNode node,String errorMsg){
+	public ErrorValue(FelNode node, String errorMsg) {
 		this.node = node;
 		this.errorMsg = errorMsg;
 	}
-	
+
 	public FelNode getNode() {
 		return node;
 	}
@@ -42,10 +38,9 @@ public class ErrorValue {
 		this.errorMsg = errorMsg;
 	}
 
+	@Override
 	public String toString() {
-		if (errorMsg != null) {
-			return errorMsg;
-		}
+		if (errorMsg != null) return errorMsg;
 		return "执行脚本出错";
 	}
 

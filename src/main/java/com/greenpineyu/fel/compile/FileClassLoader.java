@@ -14,6 +14,7 @@ public class FileClassLoader extends ClassLoader {
 		this.dir = dir;
 	}
 
+	@Override
 	public Class<?> findClass(String name) {
 		byte[] data = loadClassData(name);
 		return defineClass(name, data, 0, data.length);
@@ -33,8 +34,8 @@ public class FileClassLoader extends ClassLoader {
 			data = baos.toByteArray();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally{
-			if(fis!= null){
+		} finally {
+			if (fis != null) {
 				try {
 					fis.close();
 				} catch (IOException e) {

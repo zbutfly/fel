@@ -8,7 +8,7 @@ public class Div extends Mul {
 	Object calc(double l, double r) {
 		return NumberUtil.parseNumber(l / r);
 	}
-	
+
 	@Override
 	public String getName() {
 		return "/";

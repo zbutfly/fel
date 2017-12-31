@@ -23,8 +23,7 @@ public class FelJavaFileObject extends SimpleJavaFileObject {
 	private final CharSequence src;
 
 	public FelJavaFileObject(final String baseName, final CharSequence source) {
-		super(FelCompiler16.toUri(baseName + ".java"),
-				Kind.SOURCE);
+		super(FelCompiler16.toUri(baseName + ".java"), Kind.SOURCE);
 		this.src = source;
 	}
 
@@ -32,18 +31,15 @@ public class FelJavaFileObject extends SimpleJavaFileObject {
 		super(FelCompiler16.toUri(name), kind);
 		src = null;
 	}
-	
+
 	public FelJavaFileObject(URI uri, Kind kind) {
-		 super (uri, kind);
-		 src = null;
-	 }
+		super(uri, kind);
+		src = null;
+	}
 
 	@Override
 	public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws UnsupportedOperationException {
-		if (src == null) {
-			throw new UnsupportedOperationException();
-		}
-		
+		if (src == null) throw new UnsupportedOperationException();
 		return src;
 	}
 

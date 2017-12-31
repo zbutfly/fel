@@ -2,11 +2,8 @@ package com.greenpineyu.fel.context;
 
 import com.greenpineyu.fel.common.Null;
 
-
-
 public interface FelContext {
 
-	
 	Null NULL = new Null();
 
 	/**
@@ -27,10 +24,9 @@ public interface FelContext {
 	 *            变量值
 	 */
 	void set(String name, Object value);
-	
-	 Var getVar(String name);
-	
-	 void setVar(Var var);
 
+	Var getVar(String name);
+
+	void setVar(Var var);
 
 }

@@ -14,8 +14,7 @@ import com.greenpineyu.fel.parser.FelNode;
 
 public class Sub extends StableFunction {
 
-
-	private void appendArg(StringBuilder sb, SourceBuilder argMethod,FelContext ctx,FelNode node) {
+	private void appendArg(StringBuilder sb, SourceBuilder argMethod, FelContext ctx, FelNode node) {
 		Class<?> t = argMethod.returnType(ctx, node);
 		sb.append("(");
 		if (ReflectUtil.isPrimitiveOrWrapNumber(t)) {
@@ -27,53 +26,55 @@ public class Sub extends StableFunction {
 		sb.append(")");
 	}
 
+	@Override
 	public FelMethod toMethod(FelNode node, FelContext ctx) {
 		List<FelNode> children = node.getChildren();
 		StringBuilder sb = new StringBuilder();
 		Class<?> type = null;
 		if (children.size() == 2) {
-			//left
+			// left
 			FelNode left = children.get(0);
 			SourceBuilder lm = left.toMethod(ctx);
 			Class<?> leftType = lm.returnType(ctx, left);
-			appendArg(sb, lm,ctx,left);
-			
-			//right
+			appendArg(sb, lm, ctx, left);
+
+			// right
 			FelNode right = children.get(1);
 			SourceBuilder rm = right.toMethod(ctx);
 			Class<?> rightType = rm.returnType(ctx, right);
 			sb.append("-");
-			appendArg(sb, rm,ctx,right);
-			
-			//returnType
-			if(ReflectUtil.isPrimitiveOrWrapNumber(leftType)
-					&&ReflectUtil.isPrimitiveOrWrapNumber(rightType)){
+			appendArg(sb, rm, ctx, right);
+
+			// returnType
+			if (ReflectUtil.isPrimitiveOrWrapNumber(leftType) && ReflectUtil.isPrimitiveOrWrapNumber(rightType)) {
 				type = NumberUtil.arithmeticClass(leftType, rightType);
-			}else{
-				throw new CompileException("不支持的类型["+ReflectUtil.getClassName(leftType)
-						+"、"+ReflectUtil.getClassName(rightType)+"]。减[-]运算只支持数值类型");
+			} else {
+				throw new CompileException("不支持的类型[" + ReflectUtil.getClassName(leftType) + "、" + ReflectUtil.getClassName(rightType)
+						+ "]。减[-]运算只支持数值类型");
 			}
 		} else if (children.size() == 1) {
 			FelNode right = children.get(0);
 			SourceBuilder rm = right.toMethod(ctx);
 			Class<?> rightType = rm.returnType(ctx, right);
 			sb.append("-");
-			appendArg(sb, rm,ctx,right);
-			if(ReflectUtil.isPrimitiveOrWrapNumber(rightType)){
+			appendArg(sb, rm, ctx, right);
+			if (ReflectUtil.isPrimitiveOrWrapNumber(rightType)) {
 				type = rightType;
 			}
 		}
-//		sb.append("-");
-//		SourceBuilder rm = right.toMethod(ctx);
-//		appendArg(sb, rm,ctx,right);
+		// sb.append("-");
+		// SourceBuilder rm = right.toMethod(ctx);
+		// appendArg(sb, rm,ctx,right);
 		FelMethod m = new FelMethod(type, sb.toString());
 		return m;
 	}
 
+	@Override
 	public String getName() {
 		return "-";
 	}
 
+	@Override
 	public Object call(FelNode node, FelContext context) {
 		List<FelNode> children = node.getChildren();
 		if (children.size() == 2) {
@@ -85,11 +86,6 @@ public class Sub extends StableFunction {
 				double l = NumberUtil.toDouble(leftValue);
 				double r = NumberUtil.toDouble(rightValue);
 				return NumberUtil.parseNumber(l - r);
-//				if (NumberUtil.isFloatingPoint(left)
-//						|| NumberUtil.isFloatingPoint(right)) {
-//				}
-//				return NumberUtil.parseNumber(((Number) leftValue).longValue()
-//						- ((Number) rightValue).longValue());
 			}
 			throw new EvalException("执行减法出错，参数必须是数值型");
 		}
@@ -97,16 +93,14 @@ public class Sub extends StableFunction {
 			FelNode right = children.get(0);
 			Object rightValue = right.eval(context);
 			if (rightValue instanceof Number) {
-				if (NumberUtil.isFloatingPoint(rightValue)) {
-					return NumberUtil.toDouble(rightValue) * -1;
-				}
+				if (NumberUtil.isFloatingPoint(rightValue)) return NumberUtil.toDouble(rightValue) * -1;
 				return NumberUtil.parseNumber(((Number) rightValue).longValue() * -1);
 			}
 			throw new EvalException("执行减法出错，参数必须是数值型");
 		}
 		throw new EvalException("执行减法出错，参数长度必须是1或2");
 	}
-	
+
 	public static void main(String[] args) {
 		int a = -(1);
 		System.out.println(a);

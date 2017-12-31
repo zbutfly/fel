@@ -25,13 +25,12 @@ public class RegexSecurityMgr implements SecurityMgr {
 
 	/**
 	 * 编译成正则表达式，保存到Map中
+	 * 
 	 * @param callableSet
 	 * @param callableMapDest
 	 */
 	private void convert(Set<String> src, Map<String, Pattern> dest) {
-		if (src == null) {
-			return;
-		}
+		if (src == null) { return; }
 		for (String reg : src) {
 			Pattern pattern = Pattern.compile(toRegex(reg));
 			dest.put(reg, pattern);
@@ -40,6 +39,7 @@ public class RegexSecurityMgr implements SecurityMgr {
 
 	/**
 	 * 将用户传递的表达式，转换成正则表达式(eg:java.lang.*转换成^java\.lang\..*$)
+	 * 
 	 * @param regex
 	 * @return
 	 */
@@ -70,6 +70,7 @@ public class RegexSecurityMgr implements SecurityMgr {
 
 	/**
 	 * 获取方法签名(eg:java.lang.System.exit(int))
+	 * 
 	 * @return
 	 */
 	private String getSignature(Method m) {
@@ -95,29 +96,22 @@ public class RegexSecurityMgr implements SecurityMgr {
 
 	private boolean isMatch(Map<String, Pattern> m, String input) {
 		for (Map.Entry<String, Pattern> entry : m.entrySet()) {
-			if (entry.getValue().matcher(input).find()) {
-				return true;
-			}
+			if (entry.getValue().matcher(input).find()) return true;
 		}
 		return false;
 	}
 
-	/* 
+	/*
 	 * 
-	 *允许通过方法中包含参数方法，则允许访问。
-	 *不允许通过方法中包含参数方法，则不允许访问。
-	 *如果同时包含，则返回不允许通过方法的测试结果。 
+	 * 允许通过方法中包含参数方法，则允许访问。 不允许通过方法中包含参数方法，则不允许访问。 如果同时包含，则返回不允许通过方法的测试结果。
+	 * 
 	 * @see com.greenpineyu.fel.security.ReflectMgr#isCallable(java.lang.reflect.Method)
 	 */
-	
+	@Override
 	public boolean isCallable(Method m) {
 		String method = getSignature(m);
-		if (isMatch(uncallableMap, method)) {
-			return false;
-		}
-		if (callableMap.isEmpty()) {
-			return true;
-		}
+		if (isMatch(uncallableMap, method)) return false;
+		if (callableMap.isEmpty()) return true;
 		return isMatch(callableMap, method);
 	}
 

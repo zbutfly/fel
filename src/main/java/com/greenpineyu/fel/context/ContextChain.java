@@ -6,7 +6,7 @@ package com.greenpineyu.fel.context;
  * @author yuqingsong
  * 
  */
-public class ContextChain implements FelContext{
+public class ContextChain implements FelContext {
 
 	/**
 	 * 上级context
@@ -16,34 +16,36 @@ public class ContextChain implements FelContext{
 	 * 本级context
 	 */
 	private final FelContext current;
-	
-	public ContextChain(FelContext parent,FelContext current){
+
+	public ContextChain(FelContext parent, FelContext current) {
 		this.parent = parent;
 		this.current = current;
 	}
 
+	@Override
 	public Object get(String name) {
 		Var var = this.getVar(name);
-		return var != null?var.getValue():null;
+		return var != null ? var.getValue() : null;
 	}
 
+	@Override
 	public void set(String name, Object value) {
 		current.set(name, value);
 	}
 
-//	@Override
-//	public Class<?> getVarType(String varName) {
-//		return AbstractConetxt.getVarType(varName, this);
-//	}
+	// @Override
+	// public Class<?> getVarType(String varName) {
+	// return AbstractConetxt.getVarType(varName, this);
+	// }
 
+	@Override
 	public Var getVar(String name) {
 		Var object = current.getVar(name);
-		if(object != null){
-			return object;
-		}
+		if (object != null) return object;
 		return parent.getVar(name);
 	}
 
+	@Override
 	public void setVar(Var var) {
 		current.setVar(var);
 	}

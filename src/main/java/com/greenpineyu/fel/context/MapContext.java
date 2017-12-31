@@ -13,12 +13,11 @@ import java.util.Map;
  */
 @SuppressWarnings("serial")
 public class MapContext extends HashMap<String, Var> implements FelContext {
-	public MapContext() {
-	}
-	
-	public MapContext(Map<String,Object> map){
-//		this.putAll(map);
-		if(map != null){
+	public MapContext() {}
+
+	public MapContext(Map<String, Object> map) {
+		// this.putAll(map);
+		if (map != null) {
 			for (Map.Entry<String, Object> e : map.entrySet()) {
 				String name = e.getKey();
 				Object value = e.getValue();
@@ -27,6 +26,7 @@ public class MapContext extends HashMap<String, Var> implements FelContext {
 		}
 	}
 
+	@Override
 	public Object get(String name) {
 		Var object = super.get(name);
 		if (object != null) {
@@ -35,15 +35,15 @@ public class MapContext extends HashMap<String, Var> implements FelContext {
 		}
 		return null;
 		// map中不包含此变量返回NOT_FOUND
-//		return NOT_FOUND;
+		// return NOT_FOUND;
 	}
 
-//	@Override
-//	public Class<?> getVarType(String varName) {
-//		return AbstractConetxt.getVarType(varName,this);
-//	}
+	// @Override
+	// public Class<?> getVarType(String varName) {
+	// return AbstractConetxt.getVarType(varName,this);
+	// }
 
-
+	@Override
 	public void set(String name, Object value) {
 		// 如果变量已经存在，就不再重复创建变量。
 		Var var = getVar(name);
@@ -58,10 +58,12 @@ public class MapContext extends HashMap<String, Var> implements FelContext {
 		return var == null ? null : var.toString();
 	}
 
+	@Override
 	public Var getVar(String name) {
 		return super.get(name);
 	}
 
+	@Override
 	public void setVar(Var var) {
 		super.put(var.getName(), var);
 	}

@@ -27,7 +27,6 @@ public class VarVisitOpti implements Optimizer {
 	 * 用于保存变量
 	 */
 	private Map<String, Var> varMap;
-	
 
 	public VarVisitOpti(Var... vars) {
 		varMap = new MapContext();
@@ -40,13 +39,11 @@ public class VarVisitOpti implements Optimizer {
 		}
 	}
 
-	public VarVisitOpti() {
-	}
+	public VarVisitOpti() {}
 
-	
+	@Override
 	public FelNode call(FelContext ctx, FelNode node) {
-		List<FelNode> nodes = AbstFelNode.getNodes(node,
-				SourceGeneratorImpl.varsFilter);
+		List<FelNode> nodes = AbstFelNode.getNodes(node, SourceGeneratorImpl.varsFilter);
 		for (FelNode varNode : nodes) {
 			if (varNode instanceof VarAstNode) {
 				final VarAstNode n = (VarAstNode) varNode;
@@ -63,7 +60,7 @@ public class VarVisitOpti implements Optimizer {
 
 	private Interpreter createInterpreter() {
 		return new Interpreter() {
-			
+			@Override
 			public Object interpret(FelContext context, FelNode node) {
 				Var var = getVar(context, node);
 				return var != null ? var.getValue() : null;
@@ -77,25 +74,23 @@ public class VarVisitOpti implements Optimizer {
 			private String src = null;
 			private Class<?> returnType = null;
 
-			
+			@Override
 			public String source(FelContext ctx, FelNode node) {
 				if (src == null) {
 					Var var = getVar(ctx, node);
 					String varFieldName = VarBuffer.push(var);
 					Class<?> type = returnType(ctx, node);
-					src = VarAstNode.getVarFullCode(type, varFieldName
-							+ ".getValue()");
+					src = VarAstNode.getVarFullCode(type, varFieldName + ".getValue()");
 				}
 				return src;
 			}
 
-			
+			@Override
 			public Class<?> returnType(FelContext ctx, FelNode node) {
-				if(returnType == null){
-					returnType = InterpreterSourceBuilder.getInstance()
-							.returnType(ctx, node);
+				if (returnType == null) {
+					returnType = InterpreterSourceBuilder.getInstance().returnType(ctx, node);
 				}
-				return returnType; 
+				return returnType;
 			}
 		};
 	}

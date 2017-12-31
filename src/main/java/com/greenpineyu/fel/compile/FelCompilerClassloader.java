@@ -12,7 +12,6 @@ public final class FelCompilerClassloader extends ClassLoader {
 		super(parentClassLoader);
 	}
 
-
 	@Override
 	protected synchronized Class<?> findClass(String qualifiedClassName) throws ClassNotFoundException {
 		FileObject file = compileFileMap.remove(qualifiedClassName);

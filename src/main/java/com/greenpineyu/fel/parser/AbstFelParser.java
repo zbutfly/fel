@@ -1,6 +1,5 @@
 package com.greenpineyu.fel.parser;
 
-
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;

@@ -11,7 +11,7 @@ public abstract class StableFunction implements Function, Stable {
 	 * 
 	 * @see com.greenpineyu.fel.parser.Optimizable#stable()
 	 */
-	
+	@Override
 	public boolean stable() {
 		return true;
 	}

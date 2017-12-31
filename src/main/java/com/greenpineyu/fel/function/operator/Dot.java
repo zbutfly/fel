@@ -45,12 +45,12 @@ public class Dot implements Function {
 	}
 	public static final String DOT = ".";
 
-	
+	@Override
 	public String getName() {
 		return DOT;
 	}
 
-	
+	@Override
 	public Object call(FelNode node, FelContext context) {
 		List<FelNode> children = node.getChildren();
 		Object left = children.get(0);
@@ -82,9 +82,7 @@ public class Dot implements Function {
 			method = findMethod(cls, getMethod, new Class<?>[] { String.class });
 			args = new Object[] { exp.getText() };
 		}
-		if (method != null) {
-			return invoke(left, method, args);
-		}
+		if (method != null) return invoke(left, method, args);
 		return null;
 	}
 
@@ -99,9 +97,7 @@ public class Dot implements Function {
 	}
 
 	private Method getCallableMethod(Method m) {
-		if (m == null || securityMgr.isCallable(m)) {
-			return m;
-		}
+		if (m == null || securityMgr.isCallable(m)) return m;
 		throw new SecurityException("安全管理器[" + securityMgr.getClass().getSimpleName() + "]禁止调用方法[" + m.toString() + "]");
 	}
 
@@ -126,7 +122,7 @@ public class Dot implements Function {
 		return null;
 	}
 
-	
+	@Override
 	public FelMethod toMethod(FelNode node, FelContext context) {
 
 		StringBuilder sb = new StringBuilder();
@@ -186,8 +182,7 @@ public class Dot implements Function {
 			}
 		}
 
-		if (method != null) {
-		}
+		if (method != null) {}
 		if (rightMethodParam.endsWith(",")) {
 			rightMethodParam = rightMethodParam.substring(0, rightMethodParam.length() - 1);
 		}
@@ -202,8 +197,10 @@ public class Dot implements Function {
 	/**
 	 * 获取参数代码
 	 * 
-	 * @param paramType 方法声明的参数类型
-	 * @param paramValueType 参数值的类型
+	 * @param paramType
+	 *            方法声明的参数类型
+	 * @param paramValueType
+	 *            参数值的类型
 	 * @param paramMethod
 	 * @return
 	 */
